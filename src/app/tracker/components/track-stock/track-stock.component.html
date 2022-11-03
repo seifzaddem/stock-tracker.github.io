@@ -1,0 +1,10 @@
+<div class="track-stock">
+  <div class="track-stock__title-container">
+    <h3 class="track-stock__title-container__title">STOCK TRACKER</h3>
+  </div>
+  <p>Enter the symbol of a stock to track (i.e AAPL, TSLA, GOOGL)</p>
+  <form (ngSubmit)="track()" [formGroup]="form" class="track-stock__form">
+    <input [formControlName]="STOCK_INPUT_FORM_KEY" id="stockInput" maxlength="5" type="text">
+    <button [disabled]="!form.valid" id="trackBtn" type="submit">Track Stock</button>
+  </form>
+</div>

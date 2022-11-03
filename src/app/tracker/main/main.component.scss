@@ -1,4 +1,11 @@
 .main-container {
   display: flex;
   height: 100%;
+  justify-content: center;
+
+  > st-track-stock {
+    display: flex;
+    height: 100%;
+
+  }
 }

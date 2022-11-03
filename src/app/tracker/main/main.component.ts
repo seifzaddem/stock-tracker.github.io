@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {StockService} from '../services/stock.service';
 
 @Component({
   selector: 'st-main',
@@ -7,10 +8,13 @@ import {Component, OnInit} from '@angular/core';
 })
 export class MainComponent implements OnInit {
 
-  constructor() {
+  constructor(private stockService: StockService) {
   }
 
   ngOnInit(): void {
   }
 
+  trackStock(stock: string) {
+    this.stockService.trackStock(stock);
+  }
 }
