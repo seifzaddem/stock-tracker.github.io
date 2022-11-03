@@ -1,15 +1,16 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {MainComponent} from './tracker/main/main.component';
+import {StockTrackerContainerComponent} from './tracker/container/stock-tracker-container.component';
 
 const routes: Routes = [
-  {path: '', component : MainComponent}
+  {path: '', component: StockTrackerContainerComponent}
 ];
 
 
 @NgModule({
   declarations: [],
   imports: [RouterModule.forRoot(routes)],
-  exports : [RouterModule]
+  exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

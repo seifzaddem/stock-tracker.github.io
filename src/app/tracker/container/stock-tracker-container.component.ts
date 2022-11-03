@@ -3,10 +3,10 @@ import {StockService} from '../services/stock.service';
 
 @Component({
   selector: 'st-main',
-  templateUrl: './main.component.html',
-  styleUrls: ['./main.component.scss']
+  templateUrl: './stock-tracker-container.component.html',
+  styleUrls: ['./stock-tracker-container.component.scss']
 })
-export class MainComponent implements OnInit {
+export class StockTrackerContainerComponent implements OnInit {
 
   constructor(private stockService: StockService) {
   }
