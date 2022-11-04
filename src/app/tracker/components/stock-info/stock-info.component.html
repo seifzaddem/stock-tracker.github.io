@@ -1,0 +1,26 @@
+<div class="stock-info-container">
+  <ng-container *ngFor="let stock of stockModels">
+    <div class="stock-info">
+      <h3>{{stock.name}} ({{stock.symbol}})</h3>
+      <div class="quote-rows">
+        <div>Changes Today : {{(stock.quote.percentChange / 100) | percent:'1.0-2'}}</div>
+        <div>Opening Price : {{stock.quote.openingPrice | currency : 'USD'}}</div>
+        <ng-container [ngSwitch]="getStockVariation(stock)">
+          <div *ngSwitchCase="ascending">
+            🡽
+          </div>
+          <div *ngSwitchCase="descending">
+            🡾
+          </div>
+          <div *ngSwitchCase="constant">
+            ➖
+          </div>
+        </ng-container>
+      </div>
+      <div class="quote-rows">
+        <div>Current Price : {{stock.quote.currentPrice | currency : 'USD'}}</div>
+        <div>High Price : {{stock.quote.highPrice | currency : 'USD'}}</div>
+      </div>
+    </div>
+  </ng-container>
+</div>

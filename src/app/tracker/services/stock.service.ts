@@ -1,8 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Logger} from '../../shared/services/logger.service';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {map, Observable} from 'rxjs';
-import {ApiQuote, StockQuote} from '../models/quote.model';
+import {forkJoin, map, Observable} from 'rxjs';
+import {QuoteModel, ResultQuote} from '../models/quote.model';
+import {SymbolSearchModel, SymbolSearchResultModel} from '../models/symbol-search.model';
+import {StockModel} from '../models/stock.model';
 
 const STOCK_LIST_KEY = 'STOCK_LIST_KEY';
 
@@ -20,19 +22,22 @@ export class StockService {
     }
   }
 
-  fetchQuote(stock: string): Observable<StockQuote> {
-    const params = new HttpParams().append('symbol', stock);
-    return this.httpClient.get<ApiQuote>('quote', {params})
-      .pipe(
-        map(value => {
-          return {
-            currentPrice: value.c,
-            highPrice: value.h,
-            openingPrice: value.o,
-            previousClosingPrice: value.pc
-          };
-        })
-      );
+  fetchStockSymbol(symbol: string): Observable<SymbolSearchResultModel> {
+    const params = new HttpParams().append('q', symbol);
+    return this.httpClient.get<SymbolSearchModel>('search', {params}).pipe(
+      map(symbolSearch => {
+          if (symbolSearch.count == 0) {
+            throw new Error(symbol);
+          } else {
+            const symbolSearchModel = symbolSearch.result.find(symbolSearchResultModel => symbolSearchResultModel.symbol == symbol);
+            if (!symbolSearchModel) {
+              throw new Error(symbol);
+            }
+            return symbolSearchModel;
+          }
+        }
+      )
+    );
   }
 
   getStockList(): string[] {
@@ -52,5 +57,41 @@ export class StockService {
     return parsedStockList;
   }
 
+  fetchStock(stockSymbol: string): Observable<StockModel> {
+    const quote$ = this.fetchQuote(stockSymbol);
+    const stockSymbolResult$ = this.fetchStockSymbol(stockSymbol);
+    type forkJoinResult = [quote: QuoteModel, stockSymbolResult: SymbolSearchResultModel];
+
+    return forkJoin([quote$, stockSymbolResult$]).pipe(
+      map<forkJoinResult, StockModel>(([quote, stockSymbolResult]: forkJoinResult) => {
+        return {
+          quote: quote,
+          symbol: stockSymbolResult.symbol,
+          name: stockSymbolResult.description
+        }
+      })
+    );
+  }
+
+  fetchQuote(stock: string): Observable<QuoteModel> {
+    const params = new HttpParams().append('symbol', stock);
+    return this.httpClient.get<ResultQuote>('quote', {params})
+      .pipe(
+        map(value => {
+          return {
+            percentChange: value.dp,
+            currentPrice: value.c,
+            highPrice: value.h,
+            openingPrice: value.o,
+            previousClosingPrice: value.pc
+          };
+        })
+      );
+  }
+
+  removeStock(symbol: string, stockSymbols: string[]): void {
+    const newStockSymbols = stockSymbols.filter((value) => value != symbol);
+    localStorage.setItem(STOCK_LIST_KEY, JSON.stringify(newStockSymbols));
+  }
 }
 
