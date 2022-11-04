@@ -1,4 +1,4 @@
 <div class="stock-tracker-container">
   <st-track-stock (trackStock)="trackStock($event)"></st-track-stock>
-  <st-stock-info [stockModels]="stockModels"></st-stock-info>
+  <st-stock-info (removeSymbol)="removeSymbol($event)" [stockModels]="stockModels"></st-stock-info>
 </div>

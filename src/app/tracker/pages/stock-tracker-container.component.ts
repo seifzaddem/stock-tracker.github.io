@@ -23,7 +23,7 @@ export class StockTrackerContainerComponent implements OnInit {
       mergeMap(stockSymbol => this.stockService.fetchStock(stockSymbol)),
       tap(stockModel => this.stockModels.push(stockModel)),
       catchError((err, caught) => {
-        this.logger.warn("Unable to find a matching stock for this symbol : " + err.message);
+        this.logger.warn(`Unable to find a matching stock for this symbol : ${err.message}`);
         this.stockService.removeStock(err.message, this.stockSymbols);
         return caught;
       })
@@ -36,8 +36,13 @@ export class StockTrackerContainerComponent implements OnInit {
 
   }
 
-  trackStock(stockSymbol: string) {
+  trackStock(stockSymbol: string): void {
     this.stockService.trackStock(stockSymbol);
     this.triggerStockSearch$.next(stockSymbol);
+  }
+
+  removeSymbol(symbol: string): void {
+    this.stockService.removeStock(symbol, this.stockSymbols);
+    this.stockModels = this.stockModels.filter(stock => stock.symbol != symbol);
   }
 }

@@ -1,7 +1,10 @@
 <div class="stock-info-container">
   <ng-container *ngFor="let stock of stockModels">
     <div class="stock-info">
-      <h3>{{stock.name}} ({{stock.symbol}})</h3>
+      <div class="title-row">
+        <h3 class="stock-title">{{stock.name}} ({{stock.symbol}})</h3>
+        <div (click)="removeStock(stock.symbol)" [id]="getStockId(stock.symbol)" class="remove-stock">X</div>
+      </div>
       <div class="quote-rows">
         <div>Changes Today : {{(stock.quote.percentChange / 100) | percent:'1.0-2'}}</div>
         <div>Opening Price : {{stock.quote.openingPrice | currency : 'USD'}}</div>

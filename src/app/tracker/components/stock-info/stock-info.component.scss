@@ -15,9 +15,20 @@
   margin: 0.5rem;
   padding: 0.5rem;
 
-  > h3 {
-    color: darkblue;
-  }
+}
+
+.stock-title {
+  color: darkblue;
+}
+
+.title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.remove-stock {
+  cursor: pointer;
 }
 
 .quote-rows {

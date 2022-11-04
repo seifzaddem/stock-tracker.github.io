@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {StockModel} from '../../models/stock.model';
 
 const enum direction {
@@ -23,6 +23,9 @@ export class StockInfoComponent implements OnInit {
   @Input()
   stockModels: StockModel[];
 
+  @Output()
+  removeSymbol = new EventEmitter<string>();
+
   constructor() {
   }
 
@@ -30,6 +33,15 @@ export class StockInfoComponent implements OnInit {
   }
 
   getStockVariation(stock: StockModel): direction {
-    return stock.quote.currentPrice > 0 ? this.ascending : stock.quote.currentPrice < 0 ? this.descending : this.constant;
+    return stock.quote.percentChange > 0 ? this.ascending : stock.quote.percentChange < 0 ? this.descending : this.constant;
+  }
+
+  removeStock(symbol: string): void {
+    this.removeSymbol.emit(symbol);
+  }
+
+
+  getStockId(symbol: string): string {
+    return `remove${symbol}`;
   }
 }
