@@ -44,4 +44,8 @@ export class StockInfoComponent implements OnInit {
   getStockId(symbol: string): string {
     return `remove${symbol}`;
   }
+
+  getSentimentId(symbol: string): string {
+    return `sentiment${symbol}`;
+  }
 }
