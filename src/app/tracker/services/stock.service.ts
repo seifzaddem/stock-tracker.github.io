@@ -3,8 +3,9 @@ import {Logger} from '../../shared/services/logger.service';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {forkJoin, map, Observable} from 'rxjs';
 import {QuoteModel, ResultQuote} from '../models/quote.model';
-import {SymbolSearchModel, SymbolSearchResultModel} from '../models/symbol-search.model';
+import {SymbolDescriptionModel, SymbolDescriptionsSearchModel} from '../models/symbol-description.model';
 import {StockModel} from '../models/stock.model';
+import {SentimentData, SentimentModel, SentimentResult} from '../models/sentiment.model';
 
 const STOCK_LIST_KEY = 'STOCK_LIST_KEY';
 
@@ -22,21 +23,45 @@ export class StockService {
     }
   }
 
-  fetchStockSymbol(symbol: string): Observable<SymbolSearchResultModel> {
-    const params = new HttpParams().append('q', symbol);
-    return this.httpClient.get<SymbolSearchModel>('search', {params}).pipe(
+  fetchStockSymbol(symbol: string): Observable<SymbolDescriptionModel> {
+    const requestedSymbol = symbol.toUpperCase();
+    const params = new HttpParams().append('q', requestedSymbol);
+    return this.httpClient.get<SymbolDescriptionsSearchModel>('search', {params}).pipe(
       map(symbolSearch => {
           if (symbolSearch.count == 0) {
-            throw new Error(symbol);
+            throw new Error(requestedSymbol);
           } else {
-            const symbolSearchModel = symbolSearch.result.find(symbolSearchResultModel => symbolSearchResultModel.symbol == symbol);
+            const symbolSearchModel = symbolSearch.result.find(symbolSearchResultModel => symbolSearchResultModel.symbol == requestedSymbol);
             if (!symbolSearchModel) {
-              throw new Error(symbol);
+              throw new Error(requestedSymbol);
             }
             return symbolSearchModel;
           }
         }
       )
+    );
+  }
+
+  fetchStockSentiment(symbol: string, startDate: Date, endDate: Date): Observable<SentimentModel> {
+    const params = new HttpParams()
+      .append('symbol', symbol.toUpperCase())
+      .append('from', formatDateToString(startDate))
+      .append('to', formatDateToString(endDate));
+    return this.httpClient.get<SentimentResult>('stock/insider-sentiment', {params}).pipe(
+      map(sentimentResult => {
+        const mappedSentiment: SentimentData[] = sentimentResult.data.map(
+          sentiment => ({
+            symbol: symbol,
+            date: new Date(`${sentiment.year}-${addLeadingZero(sentiment.month)}-01`),
+            change: sentiment.change,
+            mspr: sentiment.mspr,
+          })
+        );
+        return {
+          symbol: symbol,
+          data: mappedSentiment
+        };
+      })
     );
   }
 
@@ -60,10 +85,9 @@ export class StockService {
   fetchStock(stockSymbol: string): Observable<StockModel> {
     const quote$ = this.fetchQuote(stockSymbol);
     const stockSymbolResult$ = this.fetchStockSymbol(stockSymbol);
-    type forkJoinResult = [quote: QuoteModel, stockSymbolResult: SymbolSearchResultModel];
 
     return forkJoin([quote$, stockSymbolResult$]).pipe(
-      map<forkJoinResult, StockModel>(([quote, stockSymbolResult]: forkJoinResult) => {
+      map(([quote, stockSymbolResult]) => {
         return {
           quote: quote,
           symbol: stockSymbolResult.symbol,
@@ -93,5 +117,16 @@ export class StockService {
     const newStockSymbols = stockSymbols.filter((value) => value != symbol);
     localStorage.setItem(STOCK_LIST_KEY, JSON.stringify(newStockSymbols));
   }
+}
+
+function formatDateToString(date: Date): string {
+  let day = addLeadingZero(date.getDate());
+  let month = addLeadingZero(date.getMonth() + 1);
+  const year = date.getFullYear();
+  return `${year}-${month}-${day}`;
+}
+
+function addLeadingZero(numberToPad: number) {
+  return numberToPad.toString().padStart(2, '0');
 }
 

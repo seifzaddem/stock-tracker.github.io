@@ -1,11 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {StockModel} from '../../models/stock.model';
-
-const enum direction {
-  ASCENDING = "ASCENDING",
-  DESCENDING = "DESCENDING",
-  CONSTANT = "CONSTANT"
-}
+import {StockModel, StockVariation} from '../../models/stock.model';
 
 @Component({
   selector: 'st-stock-info',
@@ -14,12 +8,10 @@ const enum direction {
 })
 export class StockInfoComponent implements OnInit {
 
-  ascending = direction.ASCENDING;
-  descending = direction.DESCENDING;
-  constant = direction.CONSTANT;
-
-  arrow: direction;
-
+  ascending = StockVariation.ASCENDING;
+  descending = StockVariation.DESCENDING;
+  constant = StockVariation.CONSTANT;
+  
   @Input()
   stockModels: StockModel[];
 
@@ -32,7 +24,7 @@ export class StockInfoComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getStockVariation(stock: StockModel): direction {
+  getStockVariation(stock: StockModel): StockVariation {
     return stock.quote.percentChange > 0 ? this.ascending : stock.quote.percentChange < 0 ? this.descending : this.constant;
   }
 
@@ -47,5 +39,9 @@ export class StockInfoComponent implements OnInit {
 
   getSentimentId(symbol: string): string {
     return `sentiment${symbol}`;
+  }
+
+  goToSentiment(symbol: string): string[] {
+    return ['sentiment', symbol];
   }
 }

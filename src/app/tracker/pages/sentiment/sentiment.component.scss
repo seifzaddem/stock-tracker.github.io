@@ -1,0 +1,36 @@
+.sentiment {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  background: white;
+  border-radius: 1rem;
+  margin: 0.5rem;
+  padding: 0.5rem;
+}
+
+.sentiment-title {
+  display: flex;
+  justify-content: center;
+  color: darkblue;
+}
+
+.sentiment-data-container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.sentiment-data-inner-container {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.sentiment-data {
+  display: flex;
+  flex-direction: column;
+}
+
+.sentiment-arrow {
+  width: 50px;
+  aspect-ratio: 1 / 1;
+}

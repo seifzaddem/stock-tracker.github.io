@@ -5,3 +5,9 @@ export interface StockModel {
   name: string;
   quote: QuoteModel;
 }
+
+export enum StockVariation {
+  ASCENDING = "ASCENDING",
+  DESCENDING = "DESCENDING",
+  CONSTANT = "CONSTANT"
+}

@@ -25,7 +25,9 @@
         <div>High Price : {{stock.quote.highPrice | currency : 'USD'}}</div>
       </div>
       <div>
-        <button [id]="getSentimentId(stock.symbol)">Go to social sentiment details</button>
+        <button [id]="getSentimentId(stock.symbol)"
+                [routerLink]="goToSentiment(stock.symbol)">Go to social sentiment details
+        </button>
       </div>
     </div>
   </ng-container>
