@@ -12,14 +12,18 @@
         </div>
         <ng-container [ngSwitch]="getStockVariation(sentimentData.change)">
           <div *ngSwitchCase="ascending">
-            <img alt="green-arrow" class="sentiment-arrow" src="assets/arrows/arrow-green.png">
+            <img alt="green-arrow"
+                 class="sentiment-arrow"
+                 src="https://www.kindpng.com/picc/m/29-297957_arrow-green-glossy-up-upload-top-up-clipart.png">
           </div>
           <div *ngSwitchCase="descending">
-            <img alt="red-arrow" class="sentiment-arrow" src="assets/arrows/arrow-red.png">
+            <img alt="red-arrow"
+                 class="sentiment-arrow"
+                 src="https://www.kindpng.com/picc/m/9-95440_red-right-arrow-png-images-pictures-red-arrow.png">
           </div>
           <div *ngSwitchCase="constant">
-            <img alt="hyphen" class="sentiment-arrow" src="assets/arrows/hyphen.png">
-
+            <img alt="hyphen" class="sentiment-arrow"
+                 src="https://www.kindpng.com/picc/m/221-2212324_41016-parallel-hd-png-download.png">
           </div>
         </ng-container>
       </div>
