@@ -9,13 +9,13 @@
         <div>Changes Today : {{(stock.quote.percentChange / 100) | percent:'1.0-2'}}</div>
         <div>Opening Price : {{stock.quote.openingPrice | currency : 'USD'}}</div>
         <ng-container [ngSwitch]="getStockVariation(stock)">
-          <div *ngSwitchCase="ascending">
+          <div *ngSwitchCase="ascending" class="sentiment-arrow green">
             🡽
           </div>
-          <div *ngSwitchCase="descending">
+          <div *ngSwitchCase="descending" class="sentiment-arrow red">
             🡾
           </div>
-          <div *ngSwitchCase="constant">
+          <div *ngSwitchCase="constant" class="sentiment-arrow blue">
             ➖
           </div>
         </ng-container>

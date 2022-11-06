@@ -11,19 +11,14 @@
           <div>MSPR : {{sentimentData.mspr}}</div>
         </div>
         <ng-container [ngSwitch]="getStockVariation(sentimentData.change)">
-          <div *ngSwitchCase="ascending">
-            <img alt="green-arrow"
-                 class="sentiment-arrow"
-                 src="https://www.kindpng.com/picc/m/29-297957_arrow-green-glossy-up-upload-top-up-clipart.png">
+          <div *ngSwitchCase="ascending" class="sentiment-arrow green">
+            🡹
           </div>
-          <div *ngSwitchCase="descending">
-            <img alt="red-arrow"
-                 class="sentiment-arrow"
-                 src="https://www.kindpng.com/picc/m/9-95440_red-right-arrow-png-images-pictures-red-arrow.png">
+          <div *ngSwitchCase="descending" class="sentiment-arrow red">
+            🡻
           </div>
-          <div *ngSwitchCase="constant">
-            <img alt="hyphen" class="sentiment-arrow"
-                 src="https://www.kindpng.com/picc/m/221-2212324_41016-parallel-hd-png-download.png">
+          <div *ngSwitchCase="constant" class="sentiment-arrow blue">
+            ➖
           </div>
         </ng-container>
       </div>

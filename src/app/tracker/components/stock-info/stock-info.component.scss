@@ -33,5 +33,23 @@
 
 .quote-rows {
   display: flex;
+  align-items: center;
   gap: 2rem;
+}
+
+.sentiment-arrow {
+  font-size: 40px;
+  aspect-ratio: 1 / 1;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
+.blue {
+  color: blue;
 }

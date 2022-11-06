@@ -98,7 +98,8 @@ export class StockService {
   }
 
   fetchQuote(stock: string): Observable<QuoteModel> {
-    const params = new HttpParams().append('symbol', stock);
+    const requestedStock = stock.toUpperCase();
+    const params = new HttpParams().append('symbol', requestedStock);
     return this.httpClient.get<ResultQuote>('quote', {params})
       .pipe(
         map(value => {
